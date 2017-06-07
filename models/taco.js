@@ -13,15 +13,12 @@ var tacoSchema = new mongoose.Schema({
   }
 })
 
-tacoSchema.pre('remove', function(next){
-  var self = this
-  // remove the id from the array of tacos for the eater of this taco
-  db.Eater.findById(this.eater).then(function(eater){
-    eater.tacos.remove(self.id)
-    eater.save().then(function(e){
-      next()
-    })
-  })
+tacoSchema.pre('remove', async function(next){
+  let self = this
+  let eater = await db.Eater.findById(this.eater)
+  eater.tacos.remove(self.id)
+  await eater.save()
+  next()
 })
 
 var Taco = mongoose.model('Taco', tacoSchema);

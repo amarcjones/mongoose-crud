@@ -2,58 +2,64 @@ var express = require("express")
 var router = express.Router()
 var db = require('../models') // by default index.js is searched for
 
-router.get('/', function(req,res,next){
-  db.Eater.find().then(function(eaters){
+router.get('/', async function(req,res,next){
+  try {
+    let eaters = await db.Eater.find()
     res.render('eaters/index', {eaters});
-  }, function(err){
+  } catch(err){
     next(err)
-  })
+  }
 })
 
 router.get('/new', function(req,res,next){
   res.render('eaters/new');
 })
 
-router.get('/:id', function(req,res,next){
-  db.Eater.findById(req.params.id).then(function(eater){
+router.get('/:id', async function(req,res,next){
+  try {
+    let eater = await db.Eater.findById(req.params.id)
     res.render('eaters/show', {eater});
-  }, function(err){
+  } catch(err){
     next(err)
-  })
+  }
 })
 
-router.get('/:id/edit', function(req,res,next){
-  db.Eater.findById(req.params.id).then(function(eater){
+router.get('/:id/edit', async function(req,res,next){
+ try {
+    let eater = await db.Eater.findById(req.params.id)
     res.render('eaters/edit', {eater});
-  }, function(err){
+  } catch(err){
     next(err)
-  })
+  }
 })
 
-router.post('/', function(req,res,next){
-  db.Eater.create(req.body.eater).then(function(){
+router.post('/', async function(req,res,next){
+  try {
+    let eater = await db.Eater.create(req.body.eater)
     res.redirect('/eaters')
-  }, function(err){
+  } catch(err){
     next(err)
-  })
+  }
 })
 
-router.patch('/:id', function(req,res,next){
-  db.Eater.findByIdAndUpdate(req.params.id, req.body.eater).then(function(){
+router.patch('/:id', async function(req,res,next){
+  try {
+    let eater = await db.Eater.findByIdAndUpdate(req.params.id, req.body.eater)
     res.redirect('/eaters')
-  }, function(err){
+  } catch(err){
     next(err)
-  })
+  }
+
 })
 
-router.delete('/:id', function(req,res,next){
-  db.Eater.findById(req.params.id).then(function(eater){
-    eater.remove().then(function(){
-      res.redirect('/eaters')
-    })
-  }, function(err){
+router.delete('/:id', async function(req,res,next){
+  try {
+    let removedEater = await db.Eater.findById(req.params.id)
+    let final = await removedEater.remove()
+    res.redirect('/eaters')
+  } catch(err){
     next(err)
-  })
+  }
 })
 
 module.exports = router;

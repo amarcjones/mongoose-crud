@@ -13,11 +13,10 @@ var eaterSchema = new mongoose.Schema({
   }]
 })
 
-eaterSchema.pre('remove', function(next){
+eaterSchema.pre('remove', async function(next){
   // find all the tacos....that have an eater property which is the id of what i will removed
-  db.Taco.remove({eater: this._id}).then(function(){
-    next()
-  })
+  await db.Taco.remove({eater: this._id})
+  next()
 })
 
 var Eater = mongoose.model('Eater', eaterSchema)

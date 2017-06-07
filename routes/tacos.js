@@ -2,60 +2,63 @@ var express = require('express');
 var router = express.Router({mergeParams: true});
 var db = require("../models");
 
-router.get('/', function(req,res,next){
-  db.Eater.findById(req.params.eater_id).populate('tacos').then(function(eater){
+router.get('/', async function(req,res,next){
+  try {
+    let eater = await db.Eater.findById(req.params.eater_id).populate('tacos')
     res.render('tacos/index', {eater})
-  }, function(err){
-    next(err)
-  })
+  } catch(e){
+    next(e)
+  }
 })
 
-router.get('/new', function(req,res,next){
-  db.Eater.findById(req.params.eater_id).then(function(eater){
+router.get('/new', async function(req,res,next){
+  try {
+    let eater = await db.Eater.findById(req.params.eater_id)
     res.render('tacos/new', {eater})
-  }, function(err){
-    next(err)
-  })
+  } catch(e){
+    next(e)
+  }
 })
 
-router.post('/', function(req,res,next){
-  var newTaco = Object.assign({}, req.body.taco, {eater: req.params.eater_id})
-  db.Taco.create(newTaco).then(function(taco){
-    db.Eater.findById(req.params.eater_id).then(function(eater){
-      eater.tacos.push(taco.id)
-      eater.save().then(function(eater){
-        res.redirect(`/eaters/${eater.id}/tacos`)
-      })
-    })
-  }, function(err){
-    next(err)
-  })
+router.post('/', async function(req,res,next){
+  try {
+    var newTaco = Object.assign({}, req.body.taco, {eater: req.params.eater_id})
+    let taco = await db.Taco.create(newTaco)
+    let eater = await db.Eater.findById(req.params.eater_id)
+    eater.tacos.push(taco.id)
+    await eater.save()
+    res.redirect(`/eaters/${eater.id}/tacos`)
+  } catch(e){
+    next(e)
+  }
 })
 
-router.get('/:id/edit', function(req,res,next){
-  db.Taco.findById(req.params.id).populate('eater').then(function(taco){
+router.get('/:id/edit', async function(req,res,next){
+  try {
+    let taco = await db.Taco.findById(req.params.id).populate('eater')
     res.render('tacos/edit', {taco})
-  }, function(err){
-    next(err)
-  })
+  } catch(e){
+    next(e)
+  }
 })
 
-router.patch('/:id', function(req,res,next){
-  db.Taco.findByIdAndUpdate(req.params.id, req.body.taco).then(function(taco){
+router.patch('/:id', async function(req,res,next){
+  try {
+    let taco = await db.Taco.findByIdAndUpdate(req.params.id, req.body.taco)
     res.redirect(`/eaters/${req.params.eater_id}/tacos`)
-  }, function(err){
-    next(err)
-  })
+  } catch(e){
+    next(e)
+  }
 })
 
-router.delete('/:id', function(req,res,next){
-  db.Taco.findById(req.params.id).then(function(taco){
-    taco.remove().then(function(){
-      res.redirect(`/eaters/${req.params.eater_id}/tacos`)
-    })
-  }, function(err){
-    next(err)
-  })
+router.delete('/:id', async function(req,res,next){
+  try {
+    let taco = await db.Taco.findById(req.params.id)
+    await taco.remove()
+    res.redirect(`/eaters/${req.params.eater_id}/tacos`)
+  } catch(e){
+    next(e)
+  }
 })
 
 module.exports = router;
