@@ -56,7 +56,7 @@ router.patch('/:id', async function(req,res,next){
 router.delete('/:id', async function(req,res,next){
   try {
     let removedEater = await db.Eater.findById(req.params.id)
-    let final = await removedEater.remove()
+    await removedEater.remove()
     res.redirect('/eaters')
   } catch(err){
     next(err)
@@ -64,12 +64,3 @@ router.delete('/:id', async function(req,res,next){
 })
 
 export default router;
-
-
-
-
-
-
-
-
-
