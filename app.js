@@ -1,10 +1,11 @@
-const express = require("express")
+import express from 'express'
+import methodOverride from 'method-override'
+import morgan from 'morgan'
+import bodyParser from 'body-parser'
+import eatersRoutes from './routes/eaters'
+import tacosRoutes from './routes/tacos'
+
 const app = express()
-const methodOverride = require("method-override")
-const morgan = require("morgan")
-const bodyParser = require("body-parser");
-const eatersRoutes = require("./routes/eaters")
-const tacosRoutes = require("./routes/tacos")
 
 app.set("view engine", "pug");
 app.use(express.static(__dirname + "/public"));

@@ -1,6 +1,7 @@
-var express = require("express")
-var router = express.Router()
-var db = require('../models') // by default index.js is searched for
+import express from "express"
+import * as db from '../models'
+
+let router = express.Router()
 
 router.get('/', async function(req,res,next){
   try {
@@ -62,7 +63,7 @@ router.delete('/:id', async function(req,res,next){
   }
 })
 
-module.exports = router;
+export default router;
 
 
 

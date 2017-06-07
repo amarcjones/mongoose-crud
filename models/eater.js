@@ -1,5 +1,5 @@
-var mongoose = require("mongoose")
-var db = require('./')
+import mongoose from 'mongoose'
+import * as db from './'
 
 var eaterSchema = new mongoose.Schema({
   name: {
@@ -19,6 +19,6 @@ eaterSchema.pre('remove', async function(next){
   next()
 })
 
-var Eater = mongoose.model('Eater', eaterSchema)
+export default mongoose.model('Eater', eaterSchema)
 
-module.exports = Eater
+// module.exports = Eater

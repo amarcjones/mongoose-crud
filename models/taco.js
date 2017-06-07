@@ -1,5 +1,5 @@
-var mongoose = require("mongoose")
-var db = require('./')
+import mongoose from 'mongoose'
+import * as db from './'
 
 var tacoSchema = new mongoose.Schema({
   name: {
@@ -21,6 +21,6 @@ tacoSchema.pre('remove', async function(next){
   next()
 })
 
-var Taco = mongoose.model('Taco', tacoSchema);
+export default mongoose.model('Taco', tacoSchema);
 
-module.exports = Taco
+// module.exports = Taco

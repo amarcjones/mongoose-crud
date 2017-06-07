@@ -1,6 +1,7 @@
-var express = require('express');
-var router = express.Router({mergeParams: true});
-var db = require("../models");
+import express from "express"
+import * as db from '../models'
+let router = express.Router({mergeParams: true});
+
 
 router.get('/', async function(req,res,next){
   try {
@@ -61,4 +62,4 @@ router.delete('/:id', async function(req,res,next){
   }
 })
 
-module.exports = router;
+export default router;
